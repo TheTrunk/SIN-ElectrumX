@@ -1,0 +1,3 @@
+[submodule "x22i_hash"]
+	path = x22i_hash
+	url = https://github.com/barrystyle/x22i_hash

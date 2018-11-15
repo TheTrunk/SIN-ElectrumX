@@ -2349,3 +2349,23 @@ class NIX(Coin):
     TX_PER_BLOCK = 3
     RPC_PORT = 6215
     REORG_LIMIT = 1000
+
+class SUQA(Coin):
+    NAME = "SUQACoin"
+    SHORTNAME = "SUQA"
+    NET = "mainnet"
+    BASIC_HEADER_SIZE = 80
+    P2PKH_VERBYTE = bytes.fromhex("3f")
+    P2SH_VERBYTES = [bytes.fromhex("05")]
+    WIF_BYTE = bytes.fromhex("bf")
+    GENESIS_HASH = ('000032bd27c65ec42967b7854a49df22'
+                    '2abdfae8d9350a61083af8eab2a25e03')
+    DESERIALIZER = lib_tx.DeserializerSegWit
+    TX_COUNT = 65326
+    TX_COUNT_HEIGHT = 25000
+    TX_PER_BLOCK = 2
+
+    @classmethod
+    def header_hash(cls, header):
+        import x22i_hash
+        return x22i_hash.getPoWHash(header)
