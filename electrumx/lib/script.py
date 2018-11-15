@@ -76,6 +76,7 @@ assert OpCodes.OP_EQUAL == 0x87
 assert OpCodes.OP_EQUALVERIFY == 0x88
 assert OpCodes.OP_CHECKSIG == 0xac
 assert OpCodes.OP_CHECKMULTISIG == 0xae
+assert OpCodes.OP_CHECKLOCKTIMEVERIFY == 0xb1
 
 
 def _match_ops(ops, pattern):
@@ -100,6 +101,7 @@ class ScriptPubKey(object):
                       OpCodes.OP_EQUALVERIFY, OpCodes.OP_CHECKSIG]
     TO_P2SH_OPS = [OpCodes.OP_HASH160, -1, OpCodes.OP_EQUAL]
     TO_PUBKEY_OPS = [-1, OpCodes.OP_CHECKSIG]
+    TO_CLTV_OPS = [OpCodes.OP_CHECKLOCKTIMEVERIFY, OpCodes.OP_DROP, OpCodes.OP_DUP, OpCodes.OP_HASH160, -1, OpCodes.OP_EQUALVERIFY, OpCodes.OP_CHECKSIG]
 
     PayToHandlers = namedtuple('PayToHandlers', 'address script_hash pubkey '
                                'unspendable strange')
@@ -123,6 +125,8 @@ class ScriptPubKey(object):
 
         match = _match_ops
 
+        if match(ops, cls.TO_CLTV_OPS):
+            return handlers.cltv(ops[3][-1])
         if match(ops, cls.TO_ADDRESS_OPS):
             return handlers.address(ops[2][-1])
         if match(ops, cls.TO_P2SH_OPS):
@@ -160,6 +164,12 @@ class ScriptPubKey(object):
     def pubkey_script(cls, pubkey):
         cls.validate_pubkey(pubkey)
         return Script.push_data(pubkey) + bytes([OpCodes.OP_CHECKSIG])
+
+    @classmethod
+    def CLTV_script(cls, hash160):
+        return (bytes([OpCodes.OP_1NEGATE, OpCodes.OP_CHECKLOCKTIMEVERIFY,
+                OpCodes.OP_DROP, OpCodes.OP_DUP, OpCodes.OP_HASH160])
+                + Script.push_data(hash160) + bytes([OpCodes.OP_EQUALVERIFY, OpCodes.OP_CHECKSIG]))
 
     @classmethod
     def multisig_script(cls, m, pubkeys):

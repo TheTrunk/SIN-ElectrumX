@@ -8,7 +8,7 @@
 
 '''Block prefetcher and chain processor.'''
 
-
+import binascii
 import array
 import asyncio
 from struct import pack, unpack
@@ -427,7 +427,10 @@ class BlockProcessor(object):
                     append_hashX(hashX)
                     put_utxo(tx_hash + s_pack('<H', idx),
                              hashX + tx_numb + s_pack('<Q', txout.value))
-
+                    if 'b175' in str(binascii.hexlify(txout.pk_script))[8:12]:
+                        print('  OP_HODL: ' + str(binascii.hexlify(txout.pk_script)))
+                    else:
+                        print(' STANDARD: ' + str(binascii.hexlify(txout.pk_script)))
             append_hashXs(hashXs)
             update_touched(hashXs)
             tx_num += 1

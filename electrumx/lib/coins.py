@@ -81,7 +81,7 @@ class Coin(object):
     DECODE_CHECK = Base58.decode_check
     # Peer discovery
     PEER_DEFAULT_PORTS = {'t': '50001', 's': '50002'}
-    PEERS = []
+    PEERS = [ '127.0.0.1 s t' ]
 
     @classmethod
     def lookup_coin_class(cls, name, net):
