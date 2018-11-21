@@ -101,7 +101,7 @@ class ScriptPubKey(object):
                       OpCodes.OP_EQUALVERIFY, OpCodes.OP_CHECKSIG]
     TO_P2SH_OPS = [OpCodes.OP_HASH160, -1, OpCodes.OP_EQUAL]
     TO_PUBKEY_OPS = [-1, OpCodes.OP_CHECKSIG]
-    TO_CLTV_OPS = [OpCodes.OP_CHECKLOCKTIMEVERIFY, OpCodes.OP_DROP, OpCodes.OP_DUP, OpCodes.OP_HASH160, -1, OpCodes.OP_EQUALVERIFY, OpCodes.OP_CHECKSIG]
+    TO_CLTV_OPS = [-1, OpCodes.OP_CHECKLOCKTIMEVERIFY, OpCodes.OP_DROP, OpCodes.OP_DUP, OpCodes.OP_HASH160, -1, OpCodes.OP_EQUALVERIFY, OpCodes.OP_CHECKSIG]
 
     PayToHandlers = namedtuple('PayToHandlers', 'address script_hash pubkey '
                                'unspendable strange')
@@ -167,7 +167,7 @@ class ScriptPubKey(object):
 
     @classmethod
     def CLTV_script(cls, hash160):
-        return (bytes([OpCodes.OP_1NEGATE, OpCodes.OP_CHECKLOCKTIMEVERIFY,
+        return (bytes([OpCodes.OP_CHECKLOCKTIMEVERIFY,
                 OpCodes.OP_DROP, OpCodes.OP_DUP, OpCodes.OP_HASH160])
                 + Script.push_data(hash160) + bytes([OpCodes.OP_EQUALVERIFY, OpCodes.OP_CHECKSIG]))
 
