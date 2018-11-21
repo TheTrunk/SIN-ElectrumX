@@ -1,24 +1,20 @@
-.. image:: https://travis-ci.org/kyuupichan/electrumx.svg?branch=master
-    :target: https://travis-ci.org/kyuupichan/electrumx
-.. image:: https://coveralls.io/repos/github/kyuupichan/electrumx/badge.svg
-    :target: https://coveralls.io/github/kyuupichan/electrumx
-
 ===============================================
 ElectrumX - Reimplementation of electrum-server
 ===============================================
 
-For a future network with bigger blocks.
-
-  :Licence: MIT
-  :Language: Python (>= 3.6)
-  :Author: Neil Booth
-
-Documentation
-=============
-
-See `readthedocs <https://electrumx.readthedocs.io/>`_.
 
 
-**Neil Booth**  kyuupichan@gmail.com  https://github.com/kyuupichan
+Suit SUQA; OP_CHECKLOCKVERIFY not fully tested, a lot of this functionality is client-triggered.
 
-bitcoincash:qzxpdlt8ehu9ehftw6rqsy2jgfq4nsltxvhrdmdfpn
+Ensure you init, update submodules and install otherwise you will face errors during build.
+
+
+Once submodule init'd (in x22i_hash folder):
+
+python3 setup.py install
+
+
+
+Recommended: Python3.7
+
+barrystyle 21112018
