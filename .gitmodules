@@ -1,3 +1,6 @@
 [submodule "x22i_hash"]
 	path = x22i_hash
 	url = https://github.com/SUQAORG/x22i_hash
+[submodule "x25x_hash"]
+	path = x25x_hash
+	url = https://github.com/SINOVATEblockchain/x25x_hash
