@@ -2350,9 +2350,9 @@ class NIX(Coin):
     RPC_PORT = 6215
     REORG_LIMIT = 1000
 
-class SUQA(Coin):
-    NAME = "SUQACoin"
-    SHORTNAME = "SUQA"
+class SIN(Coin):
+    NAME = "SIN"
+    SHORTNAME = "SIN"
     NET = "mainnet"
     BASIC_HEADER_SIZE = 80
     P2PKH_VERBYTE = bytes.fromhex("3f")
@@ -2367,5 +2367,9 @@ class SUQA(Coin):
 
     @classmethod
     def header_hash(cls, header):
-        import x22i_hash
-        return x22i_hash.getPoWHash(header)
+        import x22i_hash, x25x_hash
+        x22i_pow=x22i_hash.getPoWHash(header)
+        if '000' in (hash_to_hex_str(x22i_pow)[:3]):
+           return x22i_pow
+        else:
+           return x25x_hash.getPoWHash(header)

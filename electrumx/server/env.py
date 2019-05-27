@@ -36,7 +36,7 @@ class Env(EnvBase):
         self.db_dir = self.required('DB_DIRECTORY')
         self.db_engine = self.default('DB_ENGINE', 'leveldb')
         self.daemon_url = self.required('DAEMON_URL')
-        coin_name = 'SUQACoin'
+        coin_name = 'SIN'
         network = 'mainnet'
         self.coin = Coin.lookup_coin_class(coin_name, network)
         self.cache_MB = self.integer('CACHE_MB', 1200)
