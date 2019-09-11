@@ -2369,7 +2369,11 @@ class SIN(Coin):
     def header_hash(cls, header):
         import x22i_hash, x25x_hash
         x22i_pow=x22i_hash.getPoWHash(header)
-        if '000' in (hash_to_hex_str(x22i_pow)[:3]):
-           return x22i_pow
-        else:
-           return x25x_hash.getPoWHash(header)
+#        print ('-------------------------------')
+#        print (' Header:', bytes(header).hex())
+#        print ('    x22:', bytes(reversed(x22i_pow)).hex())
+#        print ('    x25:', bytes(reversed(x25x_hash.getPoWHash(header))).hex())
+#        if '000' in (hash_to_hex_str(x22i_pow)[:3]):
+        return x22i_pow
+#        else:
+#           return x25x_hash.getPoWHash(header)

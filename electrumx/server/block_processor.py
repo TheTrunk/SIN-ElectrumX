@@ -202,30 +202,34 @@ class BlockProcessor(object):
         headers = [block.header for block in blocks]
         hprevs = [self.coin.header_prevhash(h) for h in headers]
         chain = [self.tip] + [self.coin.header_hash(h) for h in headers[:-1]]
+#        print ('{} -- hprevs[]: {} \n -- chain[]: {}'.format(self.tip, bytes(reversed(hprevs[self.tip])).hex(), bytes(reversed(chain[self.tip])).hex()))
+#        print ('hprevs:', hprevs)
+#        print ('chain: ', chain) 
 
-        if hprevs == chain:
-            start = time.time()
-            await self.run_in_thread_with_lock(self.advance_blocks, blocks)
-            await self._maybe_flush()
-            if not self.db.first_sync:
-                s = '' if len(blocks) == 1 else 's'
-                self.logger.info('processed {:,d} block{} in {:.1f}s'
-                                 .format(len(blocks), s,
-                                         time.time() - start))
-            if self._caught_up_event.is_set():
-                await self.notifications.on_block(self.touched, self.height)
-            self.touched = set()
-        elif hprevs[0] != chain[0]:
+#        if hprevs == chain:
+        start = time.time()
+        await self.run_in_thread_with_lock(self.advance_blocks, blocks)
+        await self._maybe_flush()
+        if not self.db.first_sync:
+            s = '' if len(blocks) == 1 else 's'
+            self.logger.info('processed {:,d} block{} in {:.1f}s'
+                             .format(len(blocks), s,
+                                     time.time() - start))
+        if self._caught_up_event.is_set():
+            await self.notifications.on_block(self.touched, self.height)
+        self.touched = set()
+        if hprevs[0] != chain[0]:
             await self.reorg_chain()
-        else:
-            # It is probably possible but extremely rare that what
-            # bitcoind returns doesn't form a chain because it
-            # reorg-ed the chain as it was processing the batched
-            # block hash requests.  Should this happen it's simplest
-            # just to reset the prefetcher and try again.
-            self.logger.warning('daemon blocks do not form a chain; '
-                                'resetting the prefetcher')
-            await self.prefetcher.reset_height(self.height)
+#        else:
+#            # It is probably possible but extremely rare that what
+#            # bitcoind returns doesn't form a chain because it
+#            # reorg-ed the chain as it was processing the batched
+#            # block hash requests.  Should this happen it's simplest
+#            # just to reset the prefetcher and try again.
+#            print ('tip', self.tip)
+#            self.logger.warning('daemon blocks do not form a chain; '
+#                                'resetting the prefetcher')
+#            await self.prefetcher.reset_height(self.height)
 
     async def reorg_chain(self, count=None):
         '''Handle a chain reorganisation.
